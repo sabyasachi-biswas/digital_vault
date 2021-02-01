@@ -44,6 +44,7 @@ class GUI(Tk):
     def validation_check(self):
             error_window = Toplevel(self)
             error_window.geometry('250x50')
+            error_window.title("Error")
             error_window.resizable(False,False)
             error_label = Label(error_window, text = "Incorrect Username or Password", foreground = "red")
             error_label.pack()
@@ -83,18 +84,22 @@ class GUI(Tk):
         #button_frame
         frame_regbutton = Frame(register_window)
         frame_regbutton.pack()
-        # if regpassword == confirmpassword:
-        #     print("True")
-        # else:
-        #     print("False")
         btn_reglogin = Button(frame_regbutton, text = "REGISTER",command = self.register)
         btn_reglogin.pack(side = LEFT)
 
     def register(self):
-        value = self.entry_regpassword.get()
-        print(value)
-    
-        
+        password = self.entry_regpassword.get()
+        confirm_password = self.entry_confirmpassword.get()
+        if password == confirm_password:
+            print("True")
+        else:
+            error_window = Toplevel(self)
+            error_window.title("Error")
+            error_window.geometry('250x50')
+            error_window.resizable(False,False)
+            error_label = Label(error_window, text = "Password doesn't match", foreground = "red")
+            error_label.pack()
+                
 
 root = GUI()
 
