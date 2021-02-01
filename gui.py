@@ -5,9 +5,19 @@ from tkinter.font import Font
 login_page = Tk()
 login_page.geometry('500x250')
 login_page.minsize(400,170)
+login_page.title("Login")
 
 # ------------------Header--------------------------------------------
 font_head = Font(family = "", weight = "bold", size = 20)
+
+#-------------------Functions-----------------------------------------
+#validation_check
+def validation_check():
+    error_window = Toplevel(login_page)
+    error_window.geometry('250x50')
+    error_window.resizable(False,False)
+    error_label = Label(error_window, text = "Incorrect Username or Password", foreground = "red")
+    error_label.pack()
 
 #-------------------Buttons,Labels,etc..------------------------------
 label_text = Label(login_page, text = "Login Page", anchor = CENTER, font = font_head)
@@ -32,7 +42,7 @@ entry_password.pack()
 frame_button = Frame(login_page)
 frame_button.pack()
 
-btn_login = Button(frame_button, text = "LOGIN")
+btn_login = Button(frame_button, text = "LOGIN", command = validation_check)
 btn_login.pack(side = LEFT)
 btn_register = Button(frame_button, text = "REGISTER")
 btn_register.pack(side = BOTTOM)
