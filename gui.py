@@ -3,7 +3,7 @@ from tkinter.font import Font
 
 # ------------------Geometry------------------------------------------
 login_page = Tk()
-login_page.geometry('500x250')
+login_page.geometry('500x250+500+300')
 login_page.minsize(400,170)
 login_page.title("Login")
 
@@ -12,6 +12,7 @@ font_head = Font(family = "", weight = "bold", size = 20)
 
 #-------------------Functions-----------------------------------------
 #validation_check
+
 def validation_check():
     error_window = Toplevel(login_page)
     error_window.geometry('250x50')
@@ -19,9 +20,6 @@ def validation_check():
     error_label = Label(error_window, text = "Incorrect Username or Password", foreground = "red")
     error_label.pack()
 
-#register
-def register():
-    return True
 #user_register
 def user_register():
     register_window = Toplevel(login_page)
@@ -50,17 +48,34 @@ def user_register():
     label_confirmpassword.pack(side = LEFT)
     entry_confirmpassword = Entry(frame_confirmpassword, show = "*")
     entry_confirmpassword.pack()
+    #get_values
+    regpassword = entry_regpassword.get()
+    confirmpassword = entry_confirmpassword.get()
+    
     #button_frame
     frame_regbutton = Frame(register_window)
     frame_regbutton.pack()
 
-    btn_reglogin = Button(frame_regbutton, text = "REGISTER", command = register)
+    btn_reglogin = Button(frame_regbutton, text = "REGISTER", command = register(regpassword, confirmpassword))
     btn_reglogin.pack(side = LEFT)
+
+#register
+def register(regpassword,confirmpassword):
+    # if regpassword == confirmpassword:
+    #     return True
+    # else:
+    #     return False
+    window = Toplevel()
+    window.geometry('250x50')
+    window.resizable(False,False)
+    error_label = Label(window, text = "Password doesn't match", foreground = "red")
+    error_label.pack()
+    
 
 
 #-------------------Buttons,Labels,etc..------------------------------
 label_text = Label(login_page, text = "Login Page", anchor = CENTER, font = font_head)
-label_text.pack()
+label_text.pack(pady = 10)
 #username_frame
 frame_username = Frame(login_page)
 frame_username.pack()
@@ -71,7 +86,7 @@ entry_username = Entry(frame_username)
 entry_username.pack()
 #password_frame
 frame_password = Frame(login_page)
-frame_password.pack()
+frame_password.pack(pady = 5)
 
 label_password = Label(frame_password, text = "Password")
 label_password.pack(side = LEFT)
@@ -79,12 +94,12 @@ entry_password = Entry(frame_password, show = "*")
 entry_password.pack()
 #button_frame
 frame_button = Frame(login_page)
-frame_button.pack()
+frame_button.pack(pady = 5)
 
 btn_login = Button(frame_button, text = "LOGIN", command = validation_check)
-btn_login.pack(side = LEFT)
+btn_login.pack(side = LEFT,pady = 5,padx = 10)
 btn_register = Button(frame_button, text = "REGISTER", command = user_register)
-btn_register.pack(side = BOTTOM)
+btn_register.pack(side = BOTTOM,pady = 5,padx = 10)
 
 
 login_page.mainloop()
