@@ -22,6 +22,7 @@ def validation_check():
 
 #user_register
 def user_register():
+    print("Register butoon clicked")
     register_window = Toplevel(login_page)
     register_window.geometry('300x250')
     #regname_frame
@@ -49,27 +50,33 @@ def user_register():
     entry_confirmpassword = Entry(frame_confirmpassword, show = "*")
     entry_confirmpassword.pack()
     #get_values
-    regpassword = entry_regpassword.get()
-    confirmpassword = entry_confirmpassword.get()
+    regpassword = (entry_regpassword.get())
+    confirmpassword = (entry_confirmpassword.get())
     
     #button_frame
     frame_regbutton = Frame(register_window)
     frame_regbutton.pack()
-
-    btn_reglogin = Button(frame_regbutton, text = "REGISTER", command = register(regpassword, confirmpassword))
-    btn_reglogin.pack(side = LEFT)
-
-#register
-def register(regpassword,confirmpassword):
     # if regpassword == confirmpassword:
-    #     return True
+    #     print("True")
     # else:
-    #     return False
-    window = Toplevel()
-    window.geometry('250x50')
-    window.resizable(False,False)
-    error_label = Label(window, text = "Password doesn't match", foreground = "red")
-    error_label.pack()
+    #     print("False")
+    btn_reglogin = Button(frame_regbutton, text = "REGISTER", command = register)
+    btn_reglogin.pack(side = LEFT)
+    
+    #register
+    def register():
+        #return True
+        # if regpassword == confirmpassword:
+        #     print(regpassword)
+        # else:
+        print(regpassword)
+        # window = Toplevel()
+        # window.geometry('250x50')
+        # window.resizable(False,False)
+        # error_label = Label(window, text = "Password doesn't match", foreground = "red")
+        # error_label.pack()
+
+
     
 
 
@@ -97,9 +104,9 @@ frame_button = Frame(login_page)
 frame_button.pack(pady = 5)
 
 btn_login = Button(frame_button, text = "LOGIN", command = validation_check)
-btn_login.pack(side = LEFT,pady = 5,padx = 10)
-btn_register = Button(frame_button, text = "REGISTER", command = user_register)
-btn_register.pack(side = BOTTOM,pady = 5,padx = 10)
+btn_login.pack(pady = 5,padx = 10)
 
+btn_register = Button(frame_button, text = "REGISTER", command = user_register)
+btn_register.pack(pady = 5,padx = 10)
 
 login_page.mainloop()
