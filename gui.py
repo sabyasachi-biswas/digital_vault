@@ -28,9 +28,14 @@ label_password = Label(frame_password, text = "Password")
 label_password.pack(side = LEFT)
 entry_password = Entry(frame_password, show = "*")
 entry_password.pack()
+#button_frame
+frame_button = Frame(root)
+frame_button.pack()
 
-
-
+btn_login = Button(frame_button, text = "LOGIN")
+btn_login.pack(side = LEFT)
+btn_register = Button(frame_button, text = "REGISTER")
+btn_register.pack(side = BOTTOM)
 
 
 root.mainloop()
