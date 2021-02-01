@@ -4,6 +4,7 @@ from tkinter.font import Font
 # ------------------Geometry------------------------------------------
 root = Tk()
 root.geometry('500x250')
+root.minsize(400,170)
 
 # ------------------Header--------------------------------------------
 font_head = Font(family = "", weight = "bold", size = 20)
