@@ -7,10 +7,6 @@ class GUI(Tk):
         self.geometry('500x250+500+300')
         self.minsize(400,170)
         self.title("Login")
-        # Label(self, text="Main window").pack()
-        # Button(self, text="To enter Data", command=self.entry_Fn).pack()
-        # sum = Label(self, textvariable=self.sum_var)
-        # sum.pack()
         # ------------------Header--------------------------------------------
         font_head = Font(family = "", weight = "bold", size = 20)
         #-------------------Buttons,Labels,etc..------------------------------
@@ -52,6 +48,7 @@ class GUI(Tk):
     def user_register(self):
         print("Register butoon clicked")
         register_window = Toplevel(self)
+        register_window.title("Register")
         register_window.geometry('300x250')
         #regname_frame
         frame_regname = Frame(register_window)
