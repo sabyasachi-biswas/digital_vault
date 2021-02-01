@@ -4,9 +4,12 @@ from tkinter.font import Font
 class GUI(Tk):
     def __init__(self):
         super().__init__()
-        self.geometry('500x250+500+300')
+        self.pos_top = 700
+        self.pos_bot = 300
+        self.geometry(f'500x250+{self.pos_top}+{self.pos_bot}')
         self.resizable(False,False)
         self.title("Login")
+
         # ------------------Header--------------------------------------------
         font_head = Font(family = "", weight = "bold", size = 20)
         #-------------------Buttons,Labels,etc..------------------------------
@@ -39,7 +42,7 @@ class GUI(Tk):
         btn_register.pack(pady = 5,padx = 10)
     def validation_check(self):
             error_window = Toplevel(self)
-            error_window.geometry('250x50')
+            error_window.geometry(f'250x50+{self.pos_top}+{self.pos_bot}')
             error_window.title("Error")
             error_window.resizable(False,False)
             error_label = Label(error_window, text = "Incorrect Username or Password", foreground = "red")
@@ -49,10 +52,10 @@ class GUI(Tk):
         print("Register butoon clicked")
         register_window = Toplevel(self)
         register_window.title("Register")
-        register_window.geometry('300x250')
+        register_window.geometry(f'300x250+{self.pos_top}+{self.pos_bot}')
         #regname_frame
         frame_regname = Frame(register_window)
-        frame_regname.pack()
+        frame_regname.pack(pady = 5)
 
         label_regname = Label(frame_regname, text = "Username")
         label_regname.pack(side = LEFT)
@@ -60,7 +63,7 @@ class GUI(Tk):
         self.entry_regname.pack()
         #regpassword_frame
         frame_regpassword = Frame(register_window)
-        frame_regpassword.pack()
+        frame_regpassword.pack(pady = 5)
 
         label_regpassword = Label(frame_regpassword, text = "Password")
         label_regpassword.pack(side = LEFT)
@@ -68,7 +71,7 @@ class GUI(Tk):
         self.entry_regpassword.pack()
         #confirmpassword_frame
         frame_confirmpassword = Frame(register_window)
-        frame_confirmpassword.pack()
+        frame_confirmpassword.pack(pady = 5)
 
         label_confirmpassword = Label(frame_confirmpassword, text = "Confirm Password")
         label_confirmpassword.pack(side = LEFT)
@@ -92,7 +95,7 @@ class GUI(Tk):
         else:
             error_window = Toplevel(self)
             error_window.title("Error")
-            error_window.geometry('250x50')
+            error_window.geometry(f'250x50+{self.pos_top}+{self.pos_bot}')
             error_window.resizable(False,False)
             error_label = Label(error_window, text = "Password doesn't match", foreground = "red")
             error_label.pack()
