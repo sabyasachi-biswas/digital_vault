@@ -5,12 +5,12 @@ class GUI(Tk):
     def __init__(self):
         super().__init__()
         self.geometry('500x250+500+300')
-        self.minsize(400,170)
+        self.resizable(False,False)
         self.title("Login")
         # ------------------Header--------------------------------------------
         font_head = Font(family = "", weight = "bold", size = 20)
         #-------------------Buttons,Labels,etc..------------------------------
-        label_text = Label(self, text = "Login Page", anchor = CENTER, font = font_head)
+        label_text = Label(self, text = "Digital Vault", anchor = CENTER, font = font_head)
         label_text.pack(pady = 10)
         #username_frame
         frame_username = Frame(self)
