@@ -19,6 +19,45 @@ def validation_check():
     error_label = Label(error_window, text = "Incorrect Username or Password", foreground = "red")
     error_label.pack()
 
+#register
+def register():
+    return True
+#user_register
+def user_register():
+    register_window = Toplevel(login_page)
+    register_window.geometry('300x250')
+    #regname_frame
+    frame_regname = Frame(register_window)
+    frame_regname.pack()
+
+    label_regname = Label(frame_regname, text = "Username")
+    label_regname.pack(side = LEFT)
+    entry_regname = Entry(frame_regname)
+    entry_regname.pack()
+    #regpassword_frame
+    frame_regpassword = Frame(register_window)
+    frame_regpassword.pack()
+
+    label_regpassword = Label(frame_regpassword, text = "Password")
+    label_regpassword.pack(side = LEFT)
+    entry_regpassword = Entry(frame_regpassword, show = "*")
+    entry_regpassword.pack()
+    #confirmpassword_frame
+    frame_confirmpassword = Frame(register_window)
+    frame_confirmpassword.pack()
+
+    label_confirmpassword = Label(frame_confirmpassword, text = "Confirm Password")
+    label_confirmpassword.pack(side = LEFT)
+    entry_confirmpassword = Entry(frame_confirmpassword, show = "*")
+    entry_confirmpassword.pack()
+    #button_frame
+    frame_regbutton = Frame(register_window)
+    frame_regbutton.pack()
+
+    btn_reglogin = Button(frame_regbutton, text = "REGISTER", command = register)
+    btn_reglogin.pack(side = LEFT)
+
+
 #-------------------Buttons,Labels,etc..------------------------------
 label_text = Label(login_page, text = "Login Page", anchor = CENTER, font = font_head)
 label_text.pack()
@@ -44,7 +83,7 @@ frame_button.pack()
 
 btn_login = Button(frame_button, text = "LOGIN", command = validation_check)
 btn_login.pack(side = LEFT)
-btn_register = Button(frame_button, text = "REGISTER")
+btn_register = Button(frame_button, text = "REGISTER", command = user_register)
 btn_register.pack(side = BOTTOM)
 
 
