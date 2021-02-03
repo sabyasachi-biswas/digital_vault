@@ -41,12 +41,12 @@ class GUI(Tk):
         btn_register = Button(frame_button, text = "REGISTER", command = self.user_register)
         btn_register.pack(pady = 5,padx = 10)
     def validation_check(self):
-            error_window = Toplevel(self)
-            error_window.geometry(f'250x50+{self.winfo_x()}+{self.winfo_y()}')
-            error_window.title("Error")
-            error_window.resizable(False,False)
-            error_label = Label(error_window, text = "Incorrect Username or Password", foreground = "red")
-            error_label.pack()
+        error_window = Toplevel(self)
+        error_window.geometry(f'250x50+{self.winfo_x()}+{self.winfo_y()}')
+        error_window.title("Error")
+        error_window.resizable(False,False)
+        error_label = Label(error_window, text = "Incorrect Username or Password", foreground = "red")
+        error_label.pack()
 
     def user_register(self):
         print("Register butoon clicked")
