@@ -61,13 +61,27 @@ class GUI(Tk):
 
         new_hash = str.encode(pwd)
         c = conn.cursor()
-        c.execute("SELECT pwd FROM user")
+        c.execute
+        c.execute("SELECT username FROM user")
+        user = c.fetchall()
+        localvar = 0
+        usr_name = ""
+        for record in user:
+            if usr == record[0]:
+                # print(record[0])
+                localvar += 1
+                usr_name = usr
+                # print(localvar)
+        c.execute("SELECT pwd FROM user WHERE username=(:usr)",{
+            'usr': usr_name
+        })
         data = c.fetchall()
-        for record in data:
-        # print(str(record[0]))
-        # if new_hash == record[0]:
-        #     print(True)
-            hashing.checkpwd(new_hash,record[0])
+        if localvar == 1:
+            for record in data:
+            # print(str(record[0]))
+            # if new_hash == record[0]:
+            #     print(True)
+                print(hashing.checkpwd(new_hash,record[0]))
 
         conn.commit()
         conn.close()

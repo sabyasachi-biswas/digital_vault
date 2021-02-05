@@ -6,6 +6,6 @@ def hashpwd(password):
 
 def checkpwd(entered_pwd,password):
     if bcrypt.checkpw(entered_pwd,password):
-        print("Password Match")
+        return True
     else:
-        print("False")
+        return False
