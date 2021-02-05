@@ -1,16 +1,18 @@
 from tkinter import *
 import sqlite3
+import hashing
 
 
 root = Tk()
 root.title("Database App")
-root.geometry('700x250')
+root.geometry('400x150+700+300')
 
 
 
 def submit():
     conn = sqlite3.connect('hash_table.db')
-    value = str(hash(f_name.get()))
+    string1 = str.encode(f_name.get())
+    value = hashing.hashpwd(string1)
     c = conn.cursor()
     c.execute("INSERT INTO hash_val VALUES(:f_name)",{
         'f_name' : value
@@ -25,20 +27,15 @@ def submit():
 def printout():
     conn = sqlite3.connect('hash_table.db')
 
-    new_hash = hash(l_name.get())
-    print(new_hash)
-
+    new_hash = str.encode(l_name.get())
     c = conn.cursor()
     c.execute("SELECT value FROM hash_val")
     data = c.fetchall()
-    #print(data)
-    #print_data = ''
     for record in data:
-        print(str(record[0]))
-        if new_hash == record[0]:
-            print(True)
-    # query_label = Label(root, text=print_data)
-    # query_label.grid(row = 4, column =1)
+        # print(str(record[0]))
+        # if new_hash == record[0]:
+        #     print(True)
+        hashing.checkpwd(new_hash,record[0])
     conn.commit()
     conn.close()
 
@@ -70,7 +67,7 @@ l_name_label.grid(row = 1, column = 1)
 btn = Button(root, text = "Add Record", command = submit)
 btn.grid(row = 2, column = 1)
 
-btn_print = Button(root, text = "Print", command = printout)
+btn_print = Button(root, text = "Check", command = printout)
 btn_print.grid(row = 3, column = 1)
 
 

@@ -1,5 +1,8 @@
 from tkinter import *
+from tkinter import messagebox
 from tkinter.font import Font
+import sqlite3
+import hashing
 
 class GUI(Tk):
     def __init__(self):
@@ -21,16 +24,16 @@ class GUI(Tk):
 
         label_login = Label(frame_username, text = "Username")
         label_login.pack(side = LEFT)
-        entry_username = Entry(frame_username)
-        entry_username.pack()
+        self.entry_username = Entry(frame_username)
+        self.entry_username.pack()
         #password_frame
         frame_password = Frame(self)
         frame_password.pack(pady = 5)
 
         label_password = Label(frame_password, text = "Password")
         label_password.pack(side = LEFT)
-        entry_password = Entry(frame_password, show = "*")
-        entry_password.pack()
+        self.entry_password = Entry(frame_password, show = "*")
+        self.entry_password.pack()
         #button_frame
         frame_button = Frame(self)
         frame_button.pack(pady = 5)
@@ -41,18 +44,39 @@ class GUI(Tk):
         btn_register = Button(frame_button, text = "REGISTER", command = self.user_register)
         btn_register.pack(pady = 5,padx = 10)
     def validation_check(self):
-        error_window = Toplevel(self)
-        error_window.geometry(f'250x50+{self.winfo_x()}+{self.winfo_y()}')
-        error_window.title("Error")
-        error_window.resizable(False,False)
-        error_label = Label(error_window, text = "Incorrect Username or Password", foreground = "red")
-        error_label.pack()
+        # error_window = Toplevel(self)
+        # error_window.geometry(f'250x50+{self.winfo_x()}+{self.winfo_y()}')
+        # error_window.title("Error")
+        # error_window.resizable(False,False)
+        # error_label = Label(error_window, text = "Incorrect Username or Password", foreground = "red")
+        # error_label.pack()
+
+        # messagebox.showwarning("Warning","Wrong Password")
+
+        usr = self.entry_username.get()
+        pwd = self.entry_password.get()
+        print(usr,pwd)
+        conn = sqlite3.connect('user_data.db')
+        c = conn.cursor()
+
+        new_hash = str.encode(pwd)
+        c = conn.cursor()
+        c.execute("SELECT pwd FROM user")
+        data = c.fetchall()
+        for record in data:
+        # print(str(record[0]))
+        # if new_hash == record[0]:
+        #     print(True)
+            hashing.checkpwd(new_hash,record[0])
+
+        conn.commit()
+        conn.close()
 
     def user_register(self):
         print("Register butoon clicked")
         self.register_window = Toplevel(self)
         self.register_window.title("Register")
-        self.register_window.geometry(f'300x250+{self.winfo_x()}+{self.winfo_y()}')
+        self.register_window.geometry(f'300x250+{self.winfo_x()+115}+{self.winfo_y()}')
         #regname_frame
         frame_regname = Frame(self.register_window)
         frame_regname.pack(pady = 5)
@@ -88,19 +112,42 @@ class GUI(Tk):
         btn_reglogin.pack(side = LEFT)
 
     def register(self):
+        conn = sqlite3.connect('user_data.db')
+        c = conn.cursor()
+        usr = self.entry_regname.get()
         password = self.entry_regpassword.get()
+        hash = hashing.hashpwd(str.encode(password))
+
         confirm_password = self.entry_confirmpassword.get()
-        if password == confirm_password:
-            print("True")
-        else:
-            error_window = Toplevel(self)
-            error_window.title("Error")
-            error_window.geometry(f'250x50+{self.register_window.winfo_x()}+{self.register_window.winfo_y()}')
-            error_window.resizable(False,False)
-            error_label = Label(error_window, text = "Password doesn't match", foreground = "red")
-            error_label.pack()
+        if usr != "":
+            if password == confirm_password and password != "":
+                print("True")
+                c.execute("INSERT INTO user VALUES(:name, :password)",{
+                'name' : usr,
+                'password' : hash
+                })
+            elif password == "":
+                messagebox.showwarning("Warning","Please enter a Password")
+            else:
+                error_window = Toplevel(self)
+                error_window.title("Error")
+                error_window.geometry(f'250x50+{self.register_window.winfo_x()+25}+{self.register_window.winfo_y()+100}')
+                error_window.resizable(False,False)
+                error_label = Label(error_window, text = "Password doesn't match", foreground = "red")
+                error_label.pack()
+        conn.commit()
+        conn.close()
                 
 
 root = GUI()
+conn = sqlite3.connect('user_data.db')
+
+# c = conn.cursor()
+# c.execute("""CREATE TABLE user  (
+#     username string,
+#     pwd string
+# )""")
+# conn.commit()
+# conn.close()
 
 root.mainloop()
