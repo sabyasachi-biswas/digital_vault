@@ -1,1 +1,1 @@
-new_hash
+, emsg % keysize

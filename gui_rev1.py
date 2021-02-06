@@ -134,30 +134,46 @@ class GUI(Tk):
 
         confirm_password = self.entry_confirmpassword.get()
         if usr != "":
-            if password == confirm_password and password != "":
-                print("True")
-                c.execute("INSERT INTO user VALUES(:name, :password)",{
-                'name' : usr,
-                'password' : hash
-                })
-            elif password == "":
-                messagebox.showwarning("Warning","Please enter a Password")
+#-----------------check_if_user_already_exist--------------------
+            c.execute("SELECT username FROM user")
+            user = c.fetchall()
+            localvar = 0
+            usr_name = ""
+            for record in user:
+                if usr == record[0]:
+                    # print(record[0])
+                    localvar += 1
+                    usr_name = usr
+                    print(usr_name)
+                    # print(localvar)
+#-----------------------------------------------------------------
+            if localvar == 0:
+                if password == confirm_password and password != "":
+                    c.execute("INSERT INTO user (username, pwd) VALUES(:name, :password)",{
+                    'name' : usr,
+                    'password' : hash
+                    })
+                elif password == "":
+                    messagebox.showwarning("Warning","Please enter a Password")
+                else:
+                    error_window = Toplevel(self)
+                    error_window.title("Error")
+                    error_window.geometry(f'250x50+{self.register_window.winfo_x()+25}+{self.register_window.winfo_y()+100}')
+                    error_window.resizable(False,False)
+                    error_label = Label(error_window, text = "Password doesn't match", foreground = "red")
+                    error_label.pack()
             else:
-                error_window = Toplevel(self)
-                error_window.title("Error")
-                error_window.geometry(f'250x50+{self.register_window.winfo_x()+25}+{self.register_window.winfo_y()+100}')
-                error_window.resizable(False,False)
-                error_label = Label(error_window, text = "Password doesn't match", foreground = "red")
-                error_label.pack()
+                print("User already exist")
         conn.commit()
         conn.close()
                 
 
 root = GUI()
-conn = sqlite3.connect('user_data.db')
+# conn = sqlite3.connect('user_data.db')
 
 # c = conn.cursor()
 # c.execute("""CREATE TABLE user  (
+#     uid integer NOT NULL PRIMARY KEY,
 #     username string,
 #     pwd string
 # )""")
