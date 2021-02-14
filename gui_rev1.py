@@ -3,6 +3,7 @@ from tkinter import messagebox
 from tkinter.font import Font
 import sqlite3
 import hashing
+import vault
 
 class GUI(Tk):
     def __init__(self):
@@ -81,7 +82,12 @@ class GUI(Tk):
             # print(str(record[0]))
             # if new_hash == record[0]:
             #     print(True)
-                print(hashing.checkpwd(new_hash,record[0]))
+                if hashing.checkpwd(new_hash,record[0]):
+                    print("True")
+                    self.destroy()
+                    vault.start()
+                else:
+                    print("False")
 
         conn.commit()
         conn.close()
