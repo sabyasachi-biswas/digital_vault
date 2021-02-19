@@ -4,16 +4,20 @@ import tkinter.filedialog as filedialog
 from tkinter.font import Font
 from tkinter import ttk
 import sqlite3
+import filetype_module
 
 class GUI(Tk):
-    def __init__(self):
+    def __init__(self,uid):
+        self.uid = uid
         super().__init__()
         self.filename = "seal.jpg"
         myfont=Font(underline=1)
+        print(self.uid)
         def openimg():
             self.label = Label(self, text = "")
             self.filename = filedialog.askopenfilename()
             print(self.filename)
+            filetype_module.accept(self.filename)
             file = open(self.filename,"rb")
             self.Img = ImageTk.PhotoImage(Image.open(file))
             self.label = Label(self, image = self.Img)
@@ -49,11 +53,17 @@ class GUI(Tk):
         # columns built 
         conn = sqlite3.connect("user_data.db")
         c = conn.cursor()
-        c.execute("SELECT username FROM user")
+        c.execute("SELECT username FROM user where uid=(:uid)",{
+            'uid' : self.uid
+        })
         user = c.fetchall()
-        c.execute("SELECT uid FROM user")
+        c.execute("SELECT uid FROM user where uid=(:uid)",{
+            'uid' : self.uid
+        })
         usid = c.fetchall()
-        c.execute("SELECT pwd FROM user")
+        c.execute("SELECT pwd FROM user where uid=(:uid)",{
+            'uid' : self.uid
+        })
         upwd = c.fetchall()
         c.execute("SELECT COUNT(*) FROM user")
         count = c.fetchone()
@@ -61,7 +71,7 @@ class GUI(Tk):
         # for record in user:
         for i in range(0,count[0]):
             self.treev.insert("", 'end', text ="L1",  
-                    values =(usid[i], user[i],  upwd[i])) 
+                    values =(usid[0], user[0],  upwd[0])) 
         
         
     
@@ -70,8 +80,10 @@ class GUI(Tk):
 
 
 
-def start():
-    root = GUI()
+def start(uid):
+    root = GUI(uid)
     root.mainloop()
+    
 
-start()
+
+start(2)

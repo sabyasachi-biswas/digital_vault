@@ -85,7 +85,11 @@ class GUI(Tk):
                 if hashing.checkpwd(new_hash,record[0]):
                     print("True")
                     self.destroy()
-                    vault.start()
+                    c.execute("SELECT uid FROM user WHERE username=(:usr)",{
+                    'usr': usr_name
+                    })
+                    usid = c.fetchone()
+                    vault.start(usid[0])
                 else:
                     print("False")
 
@@ -97,6 +101,14 @@ class GUI(Tk):
         self.register_window = Toplevel(self)
         self.register_window.title("Register")
         self.register_window.geometry(f'300x250+{self.winfo_x()+115}+{self.winfo_y()}')
+        #rname_frame
+        frame_rname = Frame(self.register_window)
+        frame_rname.pack(pady = 5)
+
+        label_regname = Label(frame_rname, text = "Name")
+        label_regname.pack(side = LEFT)
+        self.entry_rname = Entry(frame_rname)
+        self.entry_rname.pack()
         #regname_frame
         frame_regname = Frame(self.register_window)
         frame_regname.pack(pady = 5)
@@ -134,13 +146,14 @@ class GUI(Tk):
     def register(self):
         conn = sqlite3.connect('user_data.db')
         c = conn.cursor()
+        nm = self.entry_rname.get()
         usr = self.entry_regname.get()
         password = self.entry_regpassword.get()
         hash = hashing.hashpwd(str.encode(password))
 
         confirm_password = self.entry_confirmpassword.get()
         if usr != "":
-#-----------------check_if_user_already_exist--------------------
+            #-----------------check_if_user_already_exist--------------------
             c.execute("SELECT username FROM user")
             user = c.fetchall()
             localvar = 0
@@ -152,10 +165,11 @@ class GUI(Tk):
                     usr_name = usr
                     print(usr_name)
                     # print(localvar)
-#-----------------------------------------------------------------
+            #-----------------------------------------------------------------
             if localvar == 0:
                 if password == confirm_password and password != "":
-                    c.execute("INSERT INTO user (username, pwd) VALUES(:name, :password)",{
+                    c.execute("INSERT INTO user (name, username, pwd) VALUES(:nm, :name, :password)",{
+                    'nm' : nm,
                     'name' : usr,
                     'password' : hash
                     })
@@ -168,18 +182,27 @@ class GUI(Tk):
                     error_window.resizable(False,False)
                     error_label = Label(error_window, text = "Password doesn't match", foreground = "red")
                     error_label.pack()
+                self.clearentry()
             else:
                 print("User already exist")
+                self.clearentry()
         conn.commit()
         conn.close()
+
+    def clearentry(self):
+        self.entry_regname.delete(0, 'end')
+        self.entry_rname.delete(0, 'end')
+        self.entry_regpassword.delete(0, 'end')
+        self.entry_confirmpassword.delete(0, 'end')
                 
 
 root = GUI()
-# conn = sqlite3.connect('user_data.db')
 
+# conn = sqlite3.connect('user_data.db')
 # c = conn.cursor()
 # c.execute("""CREATE TABLE user  (
 #     uid integer NOT NULL PRIMARY KEY,
+#     name string,
 #     username string,
 #     pwd string
 # )""")
