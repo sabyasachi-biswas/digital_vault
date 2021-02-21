@@ -11,3 +11,4 @@ def accept(filepath):
     fileext = os.path.splitext(filepath)
     checkfile(fileext[1])
 
+# accept(input("Enter filepath"))

@@ -44,6 +44,7 @@ class GUI(Tk):
 
         btn_register = Button(frame_button, text = "REGISTER", command = self.user_register)
         btn_register.pack(pady = 5,padx = 10)
+    
     def validation_check(self):
         # error_window = Toplevel(self)
         # error_window.geometry(f'250x50+{self.winfo_x()}+{self.winfo_y()}')
