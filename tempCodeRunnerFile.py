@@ -1,1 +1,1 @@
-UPDATE vault_config SET path=(:filepath) WHERE uid=(:uid)
+2

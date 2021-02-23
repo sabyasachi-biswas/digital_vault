@@ -53,24 +53,26 @@ class GUI(Tk):
             connection.close()
 
 
-        self.geometry('800x550')
+        # self.geometry('800x550')
+        self.geometry("{0}x{1}+0+0".format(self.winfo_screenwidth(), self.winfo_screenheight()))
         self.title("DGITAL VAULT")
 
-        self.btn = Button(self,text = "Open",command = openimg).grid(row = 0, column = 1,pady =10,padx =10)
+        self.btn = Button(self,text = "Open",command = openimg).grid(row = 0, column = 0,pady =10,padx =30)
         self.button_change_path = Button(self,text = "Change Path",command = change_path).grid(row = 1, column = 1,pady =10,padx =10)
         self.label = Label(self,text = "Click",font=myfont,cursor="hand2",fg="green")
         self.label.bind("<Button-3>", prep)
         self.label.grid(row = 2, column = 1,pady =30,padx =30)
+        
         self.treev = ttk.Treeview(self, selectmode="browse")
-        self.treev.grid(row = 0, column = 3,columnspan = 3,pady =30,padx =30)
+        self.treev.grid(row = 0, column = 5,columnspan = 5,pady =30,padx =30)
         self.treev["columns"] = ("1", "2", "3")
         self.treev['show'] = 'headings'
 
         # Assigning the width and anchor to  the 
         # respective columns 
-        self.treev.column("1", width = 50, anchor ='c') 
-        self.treev.column("2", width = 90, anchor ='se') 
-        self.treev.column("3", width = 150, anchor ='se') 
+        self.treev.column("1", width = 100, anchor ='c') 
+        self.treev.column("2", width = 190, anchor ='se') 
+        self.treev.column("3", width = 250, anchor ='se') 
         
         # Assigning the heading names to the  
         # respective columns 
