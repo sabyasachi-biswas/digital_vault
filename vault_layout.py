@@ -1,6 +1,8 @@
 from tkinter import Tk, Text, BOTH, W, N, E, S, ttk
 from tkinter import *
 from tkinter.ttk import Frame, Button, Label, Style
+import tkinter.filedialog as filedialog
+import filetype_module
 
 
 class Example(Frame):
@@ -12,7 +14,7 @@ class Example(Frame):
 
 
     def initUI(self):
-        self.master.geometry("700x820")
+        self.master.geometry("700x900")
         self.master.title("Windows")
         self.pack(fill=BOTH, expand=True)
 
@@ -43,8 +45,8 @@ class Example(Frame):
         treev2 = ttk.Treeview(self,height = 17, selectmode = "browse")
         treev2.grid(row = 6, column = 0,columnspan=2, rowspan=4,padx=5,pady=5,sticky=E+W+S+N)
 
-        abtn3 = Button(self, text="Add File")
-        abtn3.grid(row=1, column=5, pady=10,padx = 10)
+        btn_addfile = Button(self, text="Add File",command = self.addfile)
+        btn_addfile.grid(row=1, column=5, pady=10,padx = 10)
 
         abtn = Button(self, text="Encrypt",command = self.encrypt)
         abtn.grid(row=2, column=5, pady=10,padx = 10)
@@ -66,7 +68,12 @@ class Example(Frame):
         lbl.grid(sticky=W)
         lbl = Label(self, text="label2")
         lbl.grid(sticky=W)
-    
+
+    def addfile(self):
+        self.addfilename = filedialog.askopenfilename()
+
+        print(filetype_module.filename(self.addfilename))
+
     def encrypt(self):
         def ok():
             print(value.get())

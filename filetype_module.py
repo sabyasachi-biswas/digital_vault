@@ -1,4 +1,5 @@
 import os.path
+import ntpath
 def checkfile(fileext):
     images=[".png",".jpg",".jpeg"]
     txt=[".txt"]
@@ -6,6 +7,9 @@ def checkfile(fileext):
         print("Image")
     elif (fileext == ".txt"):
         print("Text")
+
+def filename(fileext):
+    return(ntpath.basename(fileext))
 
 def accept(filepath):
     fileext = os.path.splitext(filepath)

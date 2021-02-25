@@ -9,9 +9,18 @@ c = conn.cursor()
 #     pwd string
 # )""")
 
-c.execute("""CREATE TABLE vault_config  (
-    uid integer NOT NULL PRIMARY KEY,
-    path string
+# c.execute("""CREATE TABLE vault_config  (
+#     uid integer NOT NULL PRIMARY KEY,
+#     path string
+# )""")
+
+c.execute("""CREATE TABLE vault_data  (
+    fileid integer NOT NULL PRIMARY KEY,
+    uid integer NOT NULL,
+    state string,
+    filename string,
+    path string,
+    filetype string
 )""")
 
 conn.commit()
