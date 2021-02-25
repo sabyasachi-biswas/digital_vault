@@ -1,15 +1,19 @@
 import os.path
 import ntpath
-def checkfile(fileext):
+def checkfile(file):
+    fileext = os.path.splitext(file)
     images=[".png",".jpg",".jpeg"]
     txt=[".txt"]
-    if (fileext in images):
-        print("Image")
-    elif (fileext == ".txt"):
-        print("Text")
+    if (fileext[1] in images):
+        return("Image")
+    elif (fileext[1] == ".txt"):
+        return("Text")
 
-def filename(fileext):
-    return(ntpath.basename(fileext))
+def filesize(file):
+    filestat = os.stat(file)
+    return(filestat.st_size)
+def filename(file):
+    return(ntpath.basename(file))
 
 def accept(filepath):
     fileext = os.path.splitext(filepath)

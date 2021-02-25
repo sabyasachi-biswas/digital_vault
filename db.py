@@ -14,14 +14,16 @@ c = conn.cursor()
 #     path string
 # )""")
 
-c.execute("""CREATE TABLE vault_data  (
-    fileid integer NOT NULL PRIMARY KEY,
-    uid integer NOT NULL,
-    state string,
-    filename string,
-    path string,
-    filetype string
-)""")
+# c.execute("""CREATE TABLE vault_data  (
+#     fileid integer NOT NULL PRIMARY KEY,
+#     uid integer NOT NULL,
+#     state string,
+#     algo string,
+#     filename string,
+#     filesize integer,
+#     path string,
+#     filetype string
+# )""")
 
 conn.commit()
 conn.close()

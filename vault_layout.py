@@ -3,13 +3,14 @@ from tkinter import *
 from tkinter.ttk import Frame, Button, Label, Style
 import tkinter.filedialog as filedialog
 import filetype_module
+import sqlite3
 
 
 class Example(Frame):
 
-    def __init__(self):
+    def __init__(self,uid):
         super().__init__()
-
+        self.uid=uid
         self.initUI()
 
 
@@ -36,27 +37,27 @@ class Example(Frame):
         
 
 
-        treev = ttk.Treeview(self,height = 15, selectmode = "browse")
-        treev.grid(row = 1, column = 0,columnspan=2, rowspan=4,padx=5,pady=5,sticky=E+W+S+N)
+        self.treev_encrypt = ttk.Treeview(self,height = 15, selectmode = "browse")
+        self.treev_encrypt.grid(row = 1, column = 0,columnspan=2, rowspan=4,padx=5,pady=5,sticky=E+W+S+N)
 
         lbl = Label(self, text="Decrypted")
         lbl.grid(row = 5,column = 0,sticky=W, pady=4, padx=5)
 
-        treev2 = ttk.Treeview(self,height = 17, selectmode = "browse")
-        treev2.grid(row = 6, column = 0,columnspan=2, rowspan=4,padx=5,pady=5,sticky=E+W+S+N)
+        self.treev_decrypt = ttk.Treeview(self,height = 17, selectmode = "browse")
+        self.treev_decrypt.grid(row = 6, column = 0,columnspan=2, rowspan=4,padx=5,pady=5,sticky=E+W+S+N)
 
         btn_addfile = Button(self, text="Add File",command = self.addfile)
-        btn_addfile.grid(row=1, column=5, pady=10,padx = 10)
+        btn_addfile.grid(row=1, column=5, pady=5,padx = 10)
 
         abtn = Button(self, text="Encrypt",command = self.encrypt)
-        abtn.grid(row=2, column=5, pady=10,padx = 10)
+        abtn.grid(row=2, column=5, pady=5,padx = 10)
 
-        cbtn = Button(self, text="Decrypt")
-        cbtn.grid(row=3, column=5, pady=10,padx = 10)
+        btn_decrypt = Button(self, text="Decrypt",command = self.decrypt)
+        btn_decrypt.grid(row=3, column=5, pady=10,padx = 10)
 
         
             
-        hbtn = Button(self, text="Help")
+        hbtn = Button(self, text="Refresh",command = self.refresh_decrypt)
         hbtn.grid(row=10, column=0, pady=10,padx = 2)
 
         obtn = Button(self, text="View")
@@ -69,10 +70,87 @@ class Example(Frame):
         lbl = Label(self, text="label2")
         lbl.grid(sticky=W)
 
+        self.refresh_decrypt()
+
+    def decrypt(self):
+        self.refresh_decrypt()
+
+    def refresh_decrypt(self):
+        conn=sqlite3.connect('user_data.db')
+        c = conn.cursor()
+
+        # To avoid duplicate values in treeview
+        for record in self.treev_decrypt.get_children():
+            self.treev_decrypt.delete(record)
+
+        self.treev_decrypt["columns"] = ("1", "2", "3","4")
+        self.treev_decrypt['show'] = 'headings'
+
+        self.treev_decrypt.column("1", width = 70)
+
+        self.treev_decrypt.heading("1", text ="File ID") 
+        self.treev_decrypt.heading("2", text ="File") 
+        self.treev_decrypt.heading("3", text ="Size")
+        self.treev_decrypt.heading("4", text ="Type")
+
+        state="Decrypted"
+
+        c.execute("SELECT fileid FROM vault_data where uid=(:uid)  AND state=(:state)",{
+            'uid' : self.uid,
+            'state' : state
+        })
+        fileid=c.fetchall()
+        c.execute("SELECT filename FROM vault_data where uid=(:uid) AND state=(:state)",{
+            'uid' : self.uid,
+            'state' : state
+        })
+        filename=c.fetchall()
+        c.execute("SELECT filesize FROM vault_data where uid=(:uid) AND state=(:state)",{
+            'uid' : self.uid,
+            'state' : state
+        })
+        filesize=c.fetchall()
+        c.execute("SELECT filetype FROM vault_data where uid=(:uid) AND state=(:state)",{
+            'uid' : self.uid,
+            'state' : state
+        })
+        filetype=c.fetchall()
+        c.execute("SELECT COUNT(*) FROM vault_data where state=(:state)",{
+            'state' : state
+        })
+        count=c.fetchone()
+
+        for i in range(0,count[0]):
+            self.treev_decrypt.insert("", 'end', text ="L1",  
+                    values =(fileid[i], filename[i],  filesize[i], filetype[i]))
+
+        conn.commit()
+        conn.close()
+
     def addfile(self):
+        conn = sqlite3.connect('user_data.db')
+        c = conn.cursor()
         self.addfilename = filedialog.askopenfilename()
 
-        print(filetype_module.filename(self.addfilename))
+        filetype=filetype_module.checkfile(self.addfilename)
+        print(filetype)
+        filename=filetype_module.filename(self.addfilename)
+        filesize=filetype_module.filesize(self.addfilename)
+        print(filesize)
+        state="Decrypted"
+        algo="none"
+        c.execute("INSERT INTO vault_data (uid, state, algo, filename, filesize, path, filetype) VALUES (:uid,:state,:algo,:filename,:filesize,:path,:filetype)",{
+            'uid' : self.uid,
+            'state' : state,
+            'algo' : algo,
+            'filename' : filename,
+            'filesize' : filesize,
+            'path' : self.addfilename,
+            'filetype' : filetype
+        })
+
+        conn.commit()
+        conn.close()
 
     def encrypt(self):
         def ok():
@@ -88,12 +166,10 @@ class Example(Frame):
         button=Button(encrypt_window,text="OK",command=ok).grid()
         
 
-def main():
+def start(uid):
 
     root = Tk()
-    app = Example()
+    app = Example(uid)
     root.mainloop()
 
-
-if __name__ == '__main__':
-    main()
+start(1)
