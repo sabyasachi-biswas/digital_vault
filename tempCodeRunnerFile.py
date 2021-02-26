@@ -1,1 +1,1 @@
-print(filetype)
+encoded_message = message.encode()
