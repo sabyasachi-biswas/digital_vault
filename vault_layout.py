@@ -4,6 +4,8 @@ from tkinter.ttk import Frame, Button, Label, Style
 import tkinter.filedialog as filedialog
 import filetype_module
 import sqlite3
+import shutil
+import os
 
 
 class Example(Frame):
@@ -105,6 +107,7 @@ class Example(Frame):
             'state' : state
         })
         filename=c.fetchall()
+        print(filename)
         c.execute("SELECT filesize FROM vault_data where uid=(:uid) AND state=(:state)",{
             'uid' : self.uid,
             'state' : state
@@ -130,13 +133,25 @@ class Example(Frame):
     def addfile(self):
         conn = sqlite3.connect('user_data.db')
         c = conn.cursor()
+        #-----Moving File-----------
+        c.execute("SELECT path FROM vault_config WHERE uid=(:uid)",{
+            'uid' : self.uid
+        })
+        dest_path = c.fetchone()
+        print(dest_path[0])
+
+        #---------------------------
         self.addfilename = filedialog.askopenfilename()
 
         filetype=filetype_module.checkfile(self.addfilename)
         print(filetype)
         filename=filetype_module.filename(self.addfilename)
         filesize=filetype_module.filesize(self.addfilename)
-        print(filesize)
+        # print(filesize)
+
+        shutil.move(self.addfilename,dest_path[0])
+        filepath = os.path.join(dest_path[0],filename)
+
         state="Decrypted"
         algo="none"
         c.execute("INSERT INTO vault_data (uid, state, algo, filename, filesize, path, filetype) VALUES (:uid,:state,:algo,:filename,:filesize,:path,:filetype)",{
@@ -145,7 +160,7 @@ class Example(Frame):
             'algo' : algo,
             'filename' : filename,
             'filesize' : filesize,
-            'path' : self.addfilename,
+            'path' : filepath,
             'filetype' : filetype
         })
 

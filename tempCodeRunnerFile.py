@@ -1,1 +1,1 @@
-encoded_message = message.encode()
+Img = ImageTk.PhotoImage(Image.open(self.file))

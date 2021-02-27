@@ -112,4 +112,4 @@ def start(uid):
     root = GUI(uid)
     root.mainloop()
  
-start(2)
+start(1)

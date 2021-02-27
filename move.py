@@ -22,10 +22,13 @@ def movefile():
     print(filename)
     dest = filedialog.askdirectory()
     print(os.path.join(dest, filename))
-    shutil.move(file,os.path.join(dest, filename))
+    # shutil.move(file,os.path.join(dest, filename))
+    shutil.move(file,dest)
+
+    
 
 root = Tk()
-root.geometry("500x500")
+root.geometry("200x200")
 btn1 = Button(root,text="Open",command = openfile)
 btn1.pack()
 btn2 = Button(root,text="Move",command = movefile).pack()
