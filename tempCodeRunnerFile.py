@@ -1,1 +1,1 @@
-Img = ImageTk.PhotoImage(Image.open(self.file))
+[0]

@@ -92,7 +92,7 @@ class Example(Frame):
 
         self.treev_decrypt.heading("1", text ="File ID") 
         self.treev_decrypt.heading("2", text ="File") 
-        self.treev_decrypt.heading("3", text ="Size")
+        self.treev_decrypt.heading("3", text ="Size (KB)")
         self.treev_decrypt.heading("4", text ="Type")
 
         state="Decrypted"
@@ -107,7 +107,6 @@ class Example(Frame):
             'state' : state
         })
         filename=c.fetchall()
-        print(filename)
         c.execute("SELECT filesize FROM vault_data where uid=(:uid) AND state=(:state)",{
             'uid' : self.uid,
             'state' : state
@@ -124,8 +123,11 @@ class Example(Frame):
         count=c.fetchone()
 
         for i in range(0,count[0]):
+            local_filename = filename[i]
+            dummy_filesize = filesize[i]
+            local_filesize = dummy_filesize[0]/1024
             self.treev_decrypt.insert("", 'end', text ="L1",  
-                    values =(fileid[i], filename[i],  filesize[i], filetype[i]))
+                    values =(fileid[i], local_filename[0],  round(local_filesize,2), filetype[i]))
 
         conn.commit()
         conn.close()
@@ -167,18 +169,29 @@ class Example(Frame):
         conn.commit()
         conn.close()
 
+        self.refresh_decrypt()
+
     def encrypt(self):
         def ok():
             print(value.get())
         encrypt_window = Toplevel(self)
         encrypt_window.geometry("200x200")
-        list = ["AES-128","AES-192","AES-256","RSA"]
-        value=StringVar()
-        combobox = ttk.Combobox(encrypt_window,textvariable=value,state='readonly')
+        # list = ["AES-128","AES-192","AES-256","RSA"]
+        self.value=StringVar()
+        combobox = ttk.Combobox(encrypt_window,textvariable=self.value,state='readonly')
         combobox['values'] = ('AES-128','AES-192','AES-256','RSA')
         combobox.current(0)
         combobox.grid(pady = 10,padx = 10)
-        button=Button(encrypt_window,text="OK",command=ok).grid()
+        button=Button(encrypt_window,text="OK",command=self.refresh_encrypt).grid()
+        
+    def refresh_encrypt(self):
+        print(self.value.get())
+        try:
+            Item = self.treev_decrypt.focus()
+            localval = self.treev_decrypt.item(Item, 'values')
+            print (localval[0])
+        except IndexError:
+            print("Please select something")
         
 
 def start(uid):
