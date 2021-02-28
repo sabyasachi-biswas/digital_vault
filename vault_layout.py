@@ -1,6 +1,6 @@
 from tkinter import Tk, Text, BOTH, W, N, E, S, ttk
 from tkinter import *
-from tkinter.ttk import Frame, Button, Label, Style
+from tkinter.ttk import Frame, Button, Style
 import tkinter.filedialog as filedialog
 import filetype_module
 import sqlite3
@@ -17,7 +17,10 @@ class Example(Frame):
 
 
     def initUI(self):
-        self.master.geometry("700x900")
+        width = self.winfo_screenwidth()
+        height = self.winfo_screenheight()
+        
+        self.master.geometry(f'{width}x{height}')
         self.master.title("Windows")
         self.pack(fill=BOTH, expand=True)
 
@@ -59,20 +62,35 @@ class Example(Frame):
 
         
             
-        hbtn = Button(self, text="Refresh",command = self.refresh_decrypt)
+        hbtn = Button(self, text="Refresh",command = self.refresh)
         hbtn.grid(row=10, column=0, pady=10,padx = 2)
 
         obtn = Button(self, text="View")
         obtn.grid(row=10, column=5, pady=10,padx = 10)
 
-        lbl = Label(self, text="USERNAME")
+
+        conn=sqlite3.connect('user_data.db')
+        c = conn.cursor()
+        c.execute("SELECT name FROM user WHERE uid=(:uid)",
+        {
+            'uid': self.uid
+        })
+        local_name = c.fetchone()
+        conn.commit()
+        conn.close()
+        lbl = Label(self, text="USER:")
         lbl.grid(sticky=W)
-        lbl = Label(self, text="label")
-        lbl.grid(sticky=W)
-        lbl = Label(self, text="label2")
-        lbl.grid(sticky=W)
+        lbl_user = Label(self, text="USERNAME",font=(25),fg="green")
+        lbl_user.configure(text=local_name[0])
+        lbl_user.grid(sticky=W)
 
         self.refresh_decrypt()
+        self.refresh_encrypt()
+        self.refresh()
+
+    def refresh(self):
+        self.refresh_decrypt()
+        self.refresh_encrypt()
 
     def decrypt(self):
         self.refresh_decrypt()
@@ -88,7 +106,7 @@ class Example(Frame):
         self.treev_decrypt["columns"] = ("1", "2", "3","4")
         self.treev_decrypt['show'] = 'headings'
 
-        self.treev_decrypt.column("1", width = 70)
+        self.treev_decrypt.column("1", anchor='c')
 
         self.treev_decrypt.heading("1", text ="File ID") 
         self.treev_decrypt.heading("2", text ="File") 
@@ -182,17 +200,98 @@ class Example(Frame):
         combobox['values'] = ('AES-128','AES-192','AES-256','RSA')
         combobox.current(0)
         combobox.grid(pady = 10,padx = 10)
-        button=Button(encrypt_window,text="OK",command=self.refresh_encrypt).grid()
+        button=Button(encrypt_window,text="OK",command=self.enable_encrypt).grid()
         
-    def refresh_encrypt(self):
-        print(self.value.get())
+    def enable_encrypt(self):
+        algorithm = self.value.get()
         try:
             Item = self.treev_decrypt.focus()
             localval = self.treev_decrypt.item(Item, 'values')
             print (localval[0])
         except IndexError:
             print("Please select something")
+
+        conn=sqlite3.connect('user_data.db')
+        c = conn.cursor()
+        print (localval[0])
+        local_state = "Encrypted"
+        c.execute("UPDATE vault_data SET state=(:local_state),algo=(:algo) WHERE fileid=(:fileid)",{
+            'local_state': local_state,
+            'algo' : algorithm,
+            'fileid' : localval[0]
+        })
+        conn.commit()
+        conn.close()
+
+        self.refresh_decrypt()
+        self.refresh_encrypt()
+
+    def refresh_encrypt(self):
+        conn=sqlite3.connect('user_data.db')
+        c = conn.cursor()
+
+        # To avoid duplicate values in treeview
+        for record in self.treev_encrypt.get_children():
+            self.treev_encrypt.delete(record)
+
+        self.treev_encrypt["columns"] = ("1", "2", "3","4","5")
+        self.treev_encrypt['show'] = 'headings'
+
+        self.treev_encrypt.heading("1", text ="File ID") 
+        self.treev_encrypt.heading("2", text ="File") 
+        self.treev_encrypt.heading("3", text ="Size (KB)")
+        self.treev_encrypt.heading("4", text ="Type")
+        self.treev_encrypt.heading("5", text ="Algorithm")
+
+        self.treev_encrypt.column("1", anchor='c')
+        # self.treev_encrypt.column("1", width = 50)
+        # self.treev_encrypt.column("2", width = 210)
+        # self.treev_encrypt.column("3", width = 70)
+        # self.treev_encrypt.column("4", width = 70)
+        # self.treev_encrypt.column("5", width = 70,anchor='c')
+
+        state="Encrypted"
+
+        c.execute("SELECT fileid FROM vault_data where uid=(:uid)  AND state=(:state)",{
+            'uid' : self.uid,
+            'state' : state
+        })
+        fileid=c.fetchall()
+        c.execute("SELECT filename FROM vault_data where uid=(:uid) AND state=(:state)",{
+            'uid' : self.uid,
+            'state' : state
+        })
+        filename=c.fetchall()
+        c.execute("SELECT filesize FROM vault_data where uid=(:uid) AND state=(:state)",{
+            'uid' : self.uid,
+            'state' : state
+        })
+        filesize=c.fetchall()
+        c.execute("SELECT filetype FROM vault_data where uid=(:uid) AND state=(:state)",{
+            'uid' : self.uid,
+            'state' : state
+        })
+        filetype=c.fetchall()
+        c.execute("SELECT algo FROM vault_data where uid=(:uid) AND state=(:state)",{
+            'uid' : self.uid,
+            'state' : state
+        })
+        algo=c.fetchall()
         
+        c.execute("SELECT COUNT(*) FROM vault_data where state=(:state)",{
+            'state' : state
+        })
+        count=c.fetchone()
+
+        for i in range(0,count[0]):
+            local_filename = filename[i]
+            dummy_filesize = filesize[i]
+            local_filesize = dummy_filesize[0]/1024
+            self.treev_encrypt.insert("", 'end', text ="L1",  
+                    values =(fileid[i], local_filename[0],  round(local_filesize,2), filetype[i], algo[i]))
+
+        conn.commit()
+        conn.close()
 
 def start(uid):
 

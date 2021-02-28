@@ -1,1 +1,1 @@
-[0]
+        self.treev_encrypt.column("5", width = 50,anchor='c')
