@@ -2,7 +2,7 @@ import os.path
 import ntpath
 def checkfile(file):
     fileext = os.path.splitext(file)
-    images=[".png",".jpg",".jpeg"]
+    images=[".png",".jpg",".jpeg",".PNG"]
     txt=[".txt"]
     if (fileext[1] in images):
         return("Image")
@@ -19,4 +19,4 @@ def accept(filepath):
     fileext = os.path.splitext(filepath)
     checkfile(fileext[1])
 
-# accept(input("Enter filepath"))
+# print(checkfile(input("Enter filepath")))

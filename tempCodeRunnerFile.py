@@ -1,1 +1,3 @@
-        self.treev_encrypt.column("5", width = 50,anchor='c')
+
+        self.refresh_decrypt()
+        self.refresh_encrypt()

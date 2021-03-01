@@ -1,4 +1,6 @@
 from tkinter import Tk, Text, BOTH, W, N, E, S, ttk
+from PIL import ImageTk
+import PIL.Image
 from tkinter import *
 from tkinter.ttk import Frame, Button, Style
 import tkinter.filedialog as filedialog
@@ -65,7 +67,7 @@ class Example(Frame):
         hbtn = Button(self, text="Refresh",command = self.refresh)
         hbtn.grid(row=10, column=0, pady=10,padx = 2)
 
-        obtn = Button(self, text="View")
+        obtn = Button(self, text="View",command = self.view)
         obtn.grid(row=10, column=5, pady=10,padx = 10)
 
 
@@ -87,6 +89,41 @@ class Example(Frame):
         self.refresh_decrypt()
         self.refresh_encrypt()
         self.refresh()
+
+    def view(self):
+        try:
+            Item = self.treev_decrypt.focus()
+            localval = self.treev_decrypt.item(Item, 'values')
+        except IndexError:
+            print("Please select Decrypt")
+        
+        conn=sqlite3.connect('user_data.db')
+        c = conn.cursor()
+        c.execute("SELECT path FROM vault_data WHERE fileid=(:fileid)",{
+            'fileid':localval[0]
+        })
+        path = c.fetchone()
+        c.execute("SELECT filetype FROM vault_data WHERE fileid=(:fileid)",{
+            'fileid':localval[0]
+        })
+        filetype = c.fetchone()
+        print(filetype[0])
+        conn.commit()
+        conn.close()
+
+        view_window = Toplevel(self)
+        # label = Label(view_window, text = "").pack()
+        if (filetype[0] == "Image"):
+            file = open(path[0],"rb")
+            self.Img = ImageTk.PhotoImage(PIL.Image.open(file))
+            label = Label(view_window, image = self.Img)
+            label.pack()
+        else:
+            file = open(path[0],"r")
+            self.textval = file.read()
+            label = Label(view_window,text="Text")
+            label.configure(text=self.textval)
+            label.pack()
 
     def refresh(self):
         self.refresh_decrypt()
