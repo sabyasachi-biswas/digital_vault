@@ -31,9 +31,7 @@ class Example(Frame):
         # 
         # self.rowconfigure(3, weight=1)
         # self.rowconfigure(5, pad=7)
-
-        
-
+     
         # area = Text(self)
         # area.grid(row=1, column=0, columnspan=2, rowspan=4,
         #     padx=5, sticky=E+W+S+N)

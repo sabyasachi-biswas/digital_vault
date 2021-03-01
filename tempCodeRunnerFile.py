@@ -1,3 +1,2 @@
-
-        self.refresh_decrypt()
-        self.refresh_encrypt()
+ Item = self.treev_decrypt.focus()
+            localval = self.treev_decrypt
