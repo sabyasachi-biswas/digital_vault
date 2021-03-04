@@ -61,7 +61,7 @@ class Example(Frame):
         btn_decrypt = Button(self, text="Decrypt",command = self.decrypt)
         btn_decrypt.grid(row=3, column=5, pady=10,padx = 10)
 
-        btn_export = Button(self, text="Export",command = self.decrypt)
+        btn_export = Button(self, text="Export",command = self.export)
         btn_export.grid(row=4, column=5, pady=10,padx = 10)
         
             
@@ -335,6 +335,34 @@ class Example(Frame):
 
         conn.commit()
         conn.close()
+
+    def export(self):
+        try:
+            Item = self.treev_decrypt.focus()
+            localval = self.treev_decrypt.item(Item, 'values')
+            print (localval[0])
+        except IndexError:
+            print("Please select something")
+
+        conn=sqlite3.connect('user_data.db')
+        c = conn.cursor()
+        # print (localval[0])
+        # local_state = "Encrypted"
+        c.execute("SELECT path FROM vault_data WHERE fileid=(:fileid)",{
+            'fileid' : localval[0]
+        })
+        path = c.fetchone()
+        c.execute("DELETE FROM vault_data WHERE fileid=(:fileid)",{
+            'fileid' : localval[0]
+        })
+        conn.commit()
+        conn.close()
+
+        dest_path = filedialog.askdirectory()
+        shutil.move(path[0],dest_path)
+
+        self.refresh()
+
 
 def start(uid):
 
