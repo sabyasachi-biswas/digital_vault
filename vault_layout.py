@@ -108,7 +108,6 @@ class Example(Frame):
             'fileid':localval[0]
         })
         filetype = c.fetchone()
-        print(filetype[0])
         conn.commit()
         conn.close()
 
@@ -131,7 +130,27 @@ class Example(Frame):
         self.refresh_encrypt()
 
     def decrypt(self):
+        
+        try:
+            Item = self.treev_encrypt.focus()
+            localval = self.treev_encrypt.item(Item, 'values')
+        except IndexError:
+            print("Please select something")
+
+        conn=sqlite3.connect('user_data.db')
+        c = conn.cursor()
+        local_state = "Decrypted"
+        algo = "none"
+        c.execute("UPDATE vault_data SET state=(:local_state),algo=(:algo) WHERE fileid=(:fileid)",{
+            'local_state': local_state,
+            'algo' : algo,
+            'fileid' : localval[0]
+        })
+        conn.commit()
+        conn.close()
+
         self.refresh_decrypt()
+        self.refresh_encrypt()
 
     def refresh_decrypt(self):
         conn=sqlite3.connect('user_data.db')
@@ -199,16 +218,14 @@ class Example(Frame):
             'uid' : self.uid
         })
         dest_path = c.fetchone()
-        print(dest_path[0])
 
         #---------------------------
         self.addfilename = filedialog.askopenfilename()
 
         filetype=filetype_module.checkfile(self.addfilename)
-        print(filetype)
         filename=filetype_module.filename(self.addfilename)
         filesize=filetype_module.filesize(self.addfilename)
-        # print(filesize)
+
 
         shutil.move(self.addfilename,dest_path[0])
         filepath = os.path.join(dest_path[0],filename)
@@ -231,8 +248,6 @@ class Example(Frame):
         self.refresh_decrypt()
 
     def encrypt(self):
-        def ok():
-            print(value.get())
         encrypt_window = Toplevel(self)
         encrypt_window.geometry("200x200")
         # list = ["AES-128","AES-192","AES-256","RSA"]
@@ -248,13 +263,11 @@ class Example(Frame):
         try:
             Item = self.treev_decrypt.focus()
             localval = self.treev_decrypt.item(Item, 'values')
-            print (localval[0])
         except IndexError:
             print("Please select something")
 
         conn=sqlite3.connect('user_data.db')
         c = conn.cursor()
-        print (localval[0])
         local_state = "Encrypted"
         c.execute("UPDATE vault_data SET state=(:local_state),algo=(:algo) WHERE fileid=(:fileid)",{
             'local_state': local_state,
@@ -340,14 +353,11 @@ class Example(Frame):
         try:
             Item = self.treev_decrypt.focus()
             localval = self.treev_decrypt.item(Item, 'values')
-            print (localval[0])
         except IndexError:
             print("Please select something")
 
         conn=sqlite3.connect('user_data.db')
         c = conn.cursor()
-        # print (localval[0])
-        # local_state = "Encrypted"
         c.execute("SELECT path FROM vault_data WHERE fileid=(:fileid)",{
             'fileid' : localval[0]
         })
