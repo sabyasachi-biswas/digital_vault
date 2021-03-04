@@ -16,13 +16,14 @@ class Example(Frame):
         super().__init__()
         self.uid=uid
         self.initUI()
+        
 
 
     def initUI(self):
         width = self.winfo_screenwidth()
         height = self.winfo_screenheight()
         
-        self.master.geometry(f'{width}x{height}')
+        self.master.geometry(f'{680}x{950}')
         self.master.title("Windows")
         self.pack(fill=BOTH, expand=True)
 
@@ -48,7 +49,7 @@ class Example(Frame):
         lbl = Label(self, text="Decrypted")
         lbl.grid(row = 5,column = 0,sticky=W, pady=4, padx=5)
 
-        self.treev_decrypt = ttk.Treeview(self,height = 17, selectmode = "browse")
+        self.treev_decrypt = ttk.Treeview(self,height = 15, selectmode = "browse")
         self.treev_decrypt.grid(row = 6, column = 0,columnspan=2, rowspan=4,padx=5,pady=5,sticky=E+W+S+N)
 
         btn_addfile = Button(self, text="Add File",command = self.addfile)
@@ -60,6 +61,8 @@ class Example(Frame):
         btn_decrypt = Button(self, text="Decrypt",command = self.decrypt)
         btn_decrypt.grid(row=3, column=5, pady=10,padx = 10)
 
+        btn_export = Button(self, text="Export",command = self.decrypt)
+        btn_export.grid(row=4, column=5, pady=10,padx = 10)
         
             
         hbtn = Button(self, text="Refresh",command = self.refresh)
@@ -86,7 +89,7 @@ class Example(Frame):
 
         self.refresh_decrypt()
         self.refresh_encrypt()
-        self.refresh()
+        # self.refresh()
 
     def view(self):
         try:
@@ -141,7 +144,10 @@ class Example(Frame):
         self.treev_decrypt["columns"] = ("1", "2", "3","4")
         self.treev_decrypt['show'] = 'headings'
 
-        self.treev_decrypt.column("1", anchor='c')
+        self.treev_decrypt.column("1", width = 70, anchor='c')
+        self.treev_decrypt.column("2", width = 355)
+        self.treev_decrypt.column("3", width = 80)
+        self.treev_decrypt.column("4", width = 80,anchor='c')
 
         self.treev_decrypt.heading("1", text ="File ID") 
         self.treev_decrypt.heading("2", text ="File") 
@@ -272,18 +278,20 @@ class Example(Frame):
         self.treev_encrypt["columns"] = ("1", "2", "3","4","5")
         self.treev_encrypt['show'] = 'headings'
 
+        self.treev_encrypt.column("1", width = 70, anchor='c')
+        self.treev_encrypt.column("2", width = 300)
+        self.treev_encrypt.column("3", width = 70)
+        self.treev_encrypt.column("4", width = 70)
+        self.treev_encrypt.column("5", width = 70,anchor='c')
+
         self.treev_encrypt.heading("1", text ="File ID") 
         self.treev_encrypt.heading("2", text ="File") 
         self.treev_encrypt.heading("3", text ="Size (KB)")
         self.treev_encrypt.heading("4", text ="Type")
         self.treev_encrypt.heading("5", text ="Algorithm")
 
-        self.treev_encrypt.column("1", anchor='c')
-        # self.treev_encrypt.column("1", width = 50)
-        # self.treev_encrypt.column("2", width = 210)
-        # self.treev_encrypt.column("3", width = 70)
-        # self.treev_encrypt.column("4", width = 70)
-        # self.treev_encrypt.column("5", width = 70,anchor='c')
+        # self.treev_encrypt.column("1", anchor='c')
+        
 
         state="Encrypted"
 

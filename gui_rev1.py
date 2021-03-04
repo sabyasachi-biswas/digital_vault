@@ -3,7 +3,7 @@ from tkinter import messagebox
 from tkinter.font import Font
 import sqlite3
 import hashing
-import vault
+import vault_layout
 
 class GUI(Tk):
     def __init__(self):
@@ -17,7 +17,7 @@ class GUI(Tk):
         # ------------------Header--------------------------------------------
         font_head = Font(family = "", weight = "bold", size = 20)
         #-------------------Buttons,Labels,etc..------------------------------
-        label_text = Label(self, text = "Digital Vault", anchor = CENTER, font = font_head)
+        label_text = Label(self, text = "Encryption Vault", anchor = CENTER, font = font_head)
         label_text.pack(pady = 10)
         #username_frame
         frame_username = Frame(self)
@@ -90,7 +90,7 @@ class GUI(Tk):
                     'usr': usr_name
                     })
                     usid = c.fetchone()
-                    vault.start(usid[0])
+                    vault_layout.start(usid[0])
                 else:
                     print("False")
 
