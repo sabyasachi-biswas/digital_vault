@@ -42,22 +42,22 @@ def encrypt_message(encoded_message):
 # if __name__ == "__main__":
 #     encrypt_message("encrypt this message")
 
-i=1
-while i==1:
-    ed=input("E/D")
-    filename = filedialog.askopenfilename()
-    if ed=="E":
-        print(filename)
-        file = open(filename,"rb")
-        encrypted = encrypt_message(file.read())
-        file = open(filename,"wb")
-        file.write(encrypted)
-    if ed =="D":
-        file = open(filename,"rb")
-        decrypted = decrypt_message(file.read())
-        file = open(filename,"wb")
-        file.write(decrypted)
-    i=int(input("Exit with 0"))
+# i=1
+# while i==1:
+#     ed=input("E/D")
+#     filename = filedialog.askopenfilename()
+#     if ed=="E":
+#         print(filename)
+#         file = open(filename,"rb")
+#         encrypted = encrypt_message(file.read())
+#         file = open(filename,"wb")
+#         file.write(encrypted)
+#     if ed =="D":
+#         file = open(filename,"rb")
+#         decrypted = decrypt_message(file.read())
+#         file = open(filename,"wb")
+#         file.write(decrypted)
+#     i=int(input("Exit with 0"))
 
 # Img = Image.open(filename,'r')
 # pix_val = list(Img.getdata())
@@ -66,3 +66,16 @@ while i==1:
 # #     for j in i:
 # #         print(pix_val[j])
 # print(pix_val_flat)
+
+filename = input("Enter filename")
+file = open(filename,"rb")
+# message = encrypt_message(file.read())
+# file = open(filename,"wb")
+image = bytearray(file.read())
+print(image)
+# message = decrypt_message(file.read())
+# file = open(filename,"wb")
+
+# message = decrypt_message(contents)
+# file.write(message)
+

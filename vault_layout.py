@@ -23,15 +23,16 @@ class Example(Frame):
         width = self.winfo_screenwidth()
         height = self.winfo_screenheight()
         
-        self.master.geometry(f'{680}x{950}')
+        self.master.geometry(f'{680}x{800}')
+        self.master.resizable(False,False)
         self.master.title("Windows")
         self.pack(fill=BOTH, expand=True)
 
         self.columnconfigure(1, weight=1)
         self.columnconfigure(3, pad=7)
         # 
-        # self.rowconfigure(3, weight=1)
-        # self.rowconfigure(5, pad=7)
+        self.rowconfigure(3, weight=1)
+        self.rowconfigure(5, pad=7)
      
         # area = Text(self)
         # area.grid(row=1, column=0, columnspan=2, rowspan=4,
@@ -56,10 +57,10 @@ class Example(Frame):
         btn_addfile.grid(row=1, column=5, pady=5,padx = 10)
 
         abtn = Button(self, text="Encrypt",command = self.encrypt)
-        abtn.grid(row=2, column=5, pady=5,padx = 10)
+        abtn.grid(row=2, column=5, pady=10,padx = 10)
 
         btn_decrypt = Button(self, text="Decrypt",command = self.decrypt)
-        btn_decrypt.grid(row=3, column=5, pady=10,padx = 10)
+        btn_decrypt.grid(row=3, column=5, pady=10,padx = 10,sticky=N)
 
         btn_export = Button(self, text="Export",command = self.export)
         btn_export.grid(row=4, column=5, pady=10,padx = 10)
