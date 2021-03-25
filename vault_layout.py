@@ -381,15 +381,17 @@ class Example(Frame):
             'fileid' : localval[0]
         })
         path = c.fetchone()
+        
+
+        dest_path = filedialog.askdirectory()
+        shutil.move(path[0],dest_path)
+
         c.execute("DELETE FROM vault_data WHERE fileid=(:fileid)",{
             'fileid' : localval[0]
         })
         conn.commit()
         conn.close()
-
-        dest_path = filedialog.askdirectory()
-        shutil.move(path[0],dest_path)
-
+        
         self.refresh()
 
 
