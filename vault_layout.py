@@ -5,6 +5,7 @@ from tkinter import *
 from tkinter.ttk import Frame, Button, Style
 import tkinter.filedialog as filedialog
 import filetype_module
+import encryption_module
 import sqlite3
 import shutil
 import os
@@ -140,6 +141,11 @@ class Example(Frame):
 
         conn=sqlite3.connect('user_data.db')
         c = conn.cursor()
+        c.execute("SELECT algo FROM vault_data where fileid=(:fileid)",{
+            'fileid' : localval[0]
+        })
+        algorithm=c.fetchone()
+        
         local_state = "Decrypted"
         algo = "none"
         c.execute("UPDATE vault_data SET state=(:local_state),algo=(:algo) WHERE fileid=(:fileid)",{
@@ -147,6 +153,11 @@ class Example(Frame):
             'algo' : algo,
             'fileid' : localval[0]
         })
+        c.execute("SELECT path FROM vault_data where fileid=(:fileid)",{
+            'fileid' : localval[0]
+        })
+        path=c.fetchone()
+        encryption_module.passcontroldecrypt(localval[0],self.uid,algorithm[0],path[0])
         conn.commit()
         conn.close()
 
@@ -256,7 +267,7 @@ class Example(Frame):
         # list = ["AES-128","AES-192","AES-256","RSA"]
         self.value=StringVar()
         combobox = ttk.Combobox(encrypt_window,textvariable=self.value,state='readonly')
-        combobox['values'] = ('XOR encryption','AES-128','AES-192','AES-256','RSA')
+        combobox['values'] = ('XOR','AES-128','AES-192','AES-256','RSA')
         combobox.current(0)
         combobox.grid(pady = 10,padx = 10)
         button=Button(encrypt_window,text="OK",command=self.enable_encrypt).grid()
@@ -277,6 +288,11 @@ class Example(Frame):
             'algo' : algorithm,
             'fileid' : localval[0]
         })
+        c.execute("SELECT path FROM vault_data where fileid=(:fileid)",{
+            'fileid' : localval[0]
+        })
+        path=c.fetchone()
+        encryption_module.passcontrolencrypt(localval[0],self.uid,algorithm,path[0])
         conn.commit()
         conn.close()
 
