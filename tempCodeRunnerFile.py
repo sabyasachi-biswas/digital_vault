@@ -1,1 +1,2 @@
-self.columnconfigure(1, weight=1)
+
+start(1)

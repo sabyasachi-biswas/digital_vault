@@ -25,7 +25,7 @@ class Example(Frame):
         
         self.master.geometry(f'{680}x{800}')
         self.master.resizable(False,False)
-        self.master.title("Windows")
+        self.master.title("Vault")
         self.pack(fill=BOTH, expand=True)
 
         self.columnconfigure(1, weight=1)
@@ -250,11 +250,13 @@ class Example(Frame):
 
     def encrypt(self):
         encrypt_window = Toplevel(self)
-        encrypt_window.geometry("200x200")
+        encrypt_window.geometry("270x200")
+        encrypt_window.title("Encrypt")
+        label = Label(encrypt_window,text="Note: Only XOR encryption is available for Images").grid()
         # list = ["AES-128","AES-192","AES-256","RSA"]
         self.value=StringVar()
         combobox = ttk.Combobox(encrypt_window,textvariable=self.value,state='readonly')
-        combobox['values'] = ('AES-128','AES-192','AES-256','RSA')
+        combobox['values'] = ('XOR encryption','AES-128','AES-192','AES-256','RSA')
         combobox.current(0)
         combobox.grid(pady = 10,padx = 10)
         button=Button(encrypt_window,text="OK",command=self.enable_encrypt).grid()
