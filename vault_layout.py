@@ -226,11 +226,8 @@ class Example(Frame):
         conn = sqlite3.connect('user_data.db')
         c = conn.cursor()
         #-----Moving File-----------
-        c.execute("SELECT path FROM vault_config WHERE uid=(:uid)",{
-            'uid' : self.uid
-        })
+        c.execute("SELECT path FROM vault_path")
         dest_path = c.fetchone()
-
         #---------------------------
         self.addfilename = filedialog.askopenfilename()
 

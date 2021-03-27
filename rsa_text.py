@@ -5,16 +5,11 @@ print(file)
 inputmsg=open(file,"r",encoding='utf-8')
 strinput=inputmsg.read()
 
-
-
 m=strinput
-
-
 
 n=65339
 e=2575
 d=11983
-
 
 message_list = []
 cypher_list = []
@@ -50,4 +45,3 @@ def decrypt(m):
 
 filewrite=open(file,"w",encoding="utf-8")
 filewrite.write(encrypt(m))
-

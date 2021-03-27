@@ -28,5 +28,3 @@ for k in range (0,e):
     d=(1+(k*phi))/e
     if d.is_integer():
         print("d is",d)
-
-

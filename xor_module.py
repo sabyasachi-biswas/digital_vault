@@ -23,7 +23,7 @@ def encrypt(file,key):
 
 def decrypt(file,key):
     try:
-        path = file        
+        path = file
         fin = open(path, 'rb')
         image = fin.read()
         fin.close()
@@ -34,7 +34,7 @@ def decrypt(file,key):
 
         fin = open(path, 'wb')
         fin.write(image)
-        fin.close()   
+        fin.close()
         print("Decryption done")
         
     except Exception:

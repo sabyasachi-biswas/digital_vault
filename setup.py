@@ -1,4 +1,5 @@
 import sqlite3
+from tkinter import filedialog
 
 conn = sqlite3.connect('user_data.db')
 c = conn.cursor()
@@ -24,6 +25,17 @@ c = conn.cursor()
 #     path string,
 #     filetype string
 # )""")
+
+# c.execute("""CREATE TABLE vault_path  (
+#     path string
+# )""")
+
+# path = filedialog.askdirectory()
+# c.execute("INSERT INTO vault_path VALUES (:path)",{
+#             'path' : path
+#         })
+
+
 
 conn.commit()
 conn.close()
