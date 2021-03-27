@@ -264,7 +264,7 @@ class Example(Frame):
         # list = ["AES-128","AES-192","AES-256","RSA"]
         self.value=StringVar()
         combobox = ttk.Combobox(encrypt_window,textvariable=self.value,state='readonly')
-        combobox['values'] = ('XOR','AES-128','AES-192','AES-256','RSA')
+        combobox['values'] = ('XOR','RSA','AES-128','AES-192','AES-256')
         combobox.current(0)
         combobox.grid(pady = 10,padx = 10)
         button=Button(encrypt_window,text="OK",command=self.enable_encrypt).grid()
