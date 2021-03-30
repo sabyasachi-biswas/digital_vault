@@ -5,15 +5,15 @@ def encrypt(file,key):
 
         path = file
         fin = open(path, 'rb')
-        image = fin.read()
+        file_array = fin.read()
         fin.close()
-        image = bytearray(image)
+        file_array = bytearray(file_array)
     
-        for index, values in enumerate(image):
-            image[index] = values ^ key
+        for index, values in enumerate(file_array):
+            file_array[index] = values ^ key
     
         fin = open(path, 'wb')
-        fin.write(image)
+        fin.write(file_array)
         fin.close()
 
         print("Encryption Done")
@@ -25,15 +25,15 @@ def decrypt(file,key):
     try:
         path = file
         fin = open(path, 'rb')
-        image = fin.read()
+        file_array = fin.read()
         fin.close()
-        image = bytearray(image)
+        file_array = bytearray(file_array)
 
-        for index, values in enumerate(image):
-            image[index] = values ^ key
+        for index, values in enumerate(file_array):
+            file_array[index] = values ^ key
 
         fin = open(path, 'wb')
-        fin.write(image)
+        fin.write(file_array)
         fin.close()
         print("Decryption done")
         

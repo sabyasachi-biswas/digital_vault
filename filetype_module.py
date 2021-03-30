@@ -2,10 +2,10 @@ import os.path
 import ntpath
 def checkfile(file):
     fileext = os.path.splitext(file)
-    images=[".png",".jpg",".jpeg",".PNG"]
+    file_arrays=[".png",".jpg",".jpeg",".PNG"]
     txt=[".txt"]
-    if (fileext[1] in images):
-        return("Image")
+    if (fileext[1] in file_arrays):
+        return("file_array")
     elif (fileext[1] == ".txt"):
         return("Text")
 
@@ -18,5 +18,3 @@ def filename(file):
 def accept(filepath):
     fileext = os.path.splitext(filepath)
     checkfile(fileext[1])
-
-# print(checkfile(input("Enter filepath")))

@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter import messagebox
 from tkinter.font import Font
 import sqlite3
-import hashing
+import hashing_module
 import vault_layout
 
 class GUI(Tk):
@@ -17,7 +17,7 @@ class GUI(Tk):
         # ------------------Header--------------------------------------------
         font_head = Font(family = "", weight = "bold", size = 20)
         #-------------------Buttons,Labels,etc..------------------------------
-        label_text = Label(self, text = "Encryption Vault", anchor = CENTER, font = font_head)
+        label_text = Label(self, text = "Encrypted File Vault", anchor = CENTER, font = font_head)
         label_text.pack(pady = 10)
         #username_frame
         frame_username = Frame(self)
@@ -57,7 +57,6 @@ class GUI(Tk):
 
         usr = self.entry_username.get()
         pwd = self.entry_password.get()
-        print(usr,pwd)
         conn = sqlite3.connect('user_data.db')
         c = conn.cursor()
 
@@ -83,8 +82,8 @@ class GUI(Tk):
             # print(str(record[0]))
             # if new_hash == record[0]:
             #     print(True)
-                if hashing.checkpwd(new_hash,record[0]):
-                    print("True")
+                if hashing_module.checkpwd(new_hash,record[0]):
+                    print("Matched")
                     self.destroy()
                     c.execute("SELECT uid FROM user WHERE username=(:usr)",{
                     'usr': usr_name
@@ -92,7 +91,21 @@ class GUI(Tk):
                     usid = c.fetchone()
                     vault_layout.start(usid[0])
                 else:
-                    print("False")
+                    print("Wrong Password")
+                    error_window = Toplevel(self)
+                    error_window.title("Error")
+                    error_window.geometry(f'250x50+{self.winfo_x()+25}+{self.winfo_y()+100}')
+                    error_window.resizable(False,False)
+                    error_label = Label(error_window, text = "Wrong password", foreground = "red")
+                    error_label.pack()
+        else:
+            error_window = Toplevel(self)
+            error_window.title("Error")
+            error_window.geometry(f'250x50+{self.winfo_x()+25}+{self.winfo_y()+100}')
+            error_window.resizable(False,False)
+            error_label = Label(error_window, text = "User does not exist", foreground = "red")
+            error_label.pack()
+
 
         conn.commit()
         conn.close()
@@ -150,7 +163,7 @@ class GUI(Tk):
         nm = self.entry_rname.get()
         usr = self.entry_regname.get()
         password = self.entry_regpassword.get()
-        hash = hashing.hashpwd(str.encode(password))
+        hash = hashing_module.hashpwd(str.encode(password))
 
         confirm_password = self.entry_confirmpassword.get()
         if usr != "":
@@ -175,7 +188,12 @@ class GUI(Tk):
                     'password' : hash
                     })
                 elif password == "":
-                    messagebox.showwarning("Warning","Please enter a Password")
+                    error_window = Toplevel(self)
+                    error_window.title("Error")
+                    error_window.geometry(f'250x50+{self.register_window.winfo_x()+25}+{self.register_window.winfo_y()+100}')
+                    error_window.resizable(False,False)
+                    error_label = Label(error_window, text = "Fill all fields", foreground = "red")
+                    error_label.pack()
                 else:
                     error_window = Toplevel(self)
                     error_window.title("Error")
@@ -186,6 +204,12 @@ class GUI(Tk):
                 self.clearentry()
             else:
                 print("User already exist")
+                error_window = Toplevel(self)
+                error_window.title("Error")
+                error_window.geometry(f'250x50+{self.register_window.winfo_x()+25}+{self.register_window.winfo_y()+100}')
+                error_window.resizable(False,False)
+                error_label = Label(error_window, text = "User already exists", foreground = "red")
+                error_label.pack()
                 self.clearentry()
         conn.commit()
         conn.close()

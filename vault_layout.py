@@ -207,8 +207,9 @@ class Example(Frame):
             'state' : state
         })
         filetype=c.fetchall()
-        c.execute("SELECT COUNT(*) FROM vault_data where state=(:state)",{
-            'state' : state
+        c.execute("SELECT COUNT(*) FROM vault_data where state=(:state) AND uid=(:uid)",{
+            'state' : state,
+            'uid' : self.uid
         })
         count=c.fetchone()
 
@@ -264,7 +265,7 @@ class Example(Frame):
         # list = ["AES-128","AES-192","AES-256","RSA"]
         self.value=StringVar()
         combobox = ttk.Combobox(encrypt_window,textvariable=self.value,state='readonly')
-        combobox['values'] = ('XOR','RSA','DES','AES-192','AES-256')
+        combobox['values'] = ('XOR','RSA','DES')
         combobox.current(0)
         combobox.grid(pady = 10,padx = 10)
         button=Button(encrypt_window,text="OK",command=self.enable_encrypt).grid()
@@ -398,4 +399,4 @@ def start(uid):
     app = Example(uid)
     root.mainloop()
 
-start(1)
+# start(1)
