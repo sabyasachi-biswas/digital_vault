@@ -11,10 +11,6 @@ c.execute("""CREATE TABLE user  (
     pwd string
 )""")
 
-c.execute("""CREATE TABLE vault_config  (
-    uid integer NOT NULL PRIMARY KEY,
-    path string
-)""")
 
 c.execute("""CREATE TABLE vault_data  (
     fileid integer NOT NULL PRIMARY KEY,
