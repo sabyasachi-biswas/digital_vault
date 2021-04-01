@@ -399,4 +399,7 @@ def start(uid):
     app = Example(uid)
     root.mainloop()
 
+<<<<<<< HEAD
 # start(1)
+=======
+>>>>>>> 61f86cf22e0db751a4d7caac8d268ff6c3169d34
