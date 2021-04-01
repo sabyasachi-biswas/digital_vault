@@ -399,4 +399,4 @@ def start(uid):
     app = Example(uid)
     root.mainloop()
 
-start(1)
+# start(1)
